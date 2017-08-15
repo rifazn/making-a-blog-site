@@ -58,6 +58,23 @@ function convertSqlDate($sqlDate)
     return $date->format('d M Y, H:i');
 }
 
+function getSqlDateForNow()
+{
+    return date('Y-m-d H:i:s');
+}
+
+/**
+ * Converts unsafe text to safe, paragraphed, HTML
+ *
+ * @param string $text
+ * @return string
+ */
+function convertNewlinesToParagraphs($text)
+{
+    $escaped = htmlEscape($text);
+    return '<p>' . str_replace("\n", "</p><p>", $escaped) . '</p>';
+}
+
 function redirectAndExit($script)
 {
     // Get the domain relative URL (e.g. /blog/whatever.php or /whatever.php) and work
