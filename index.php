@@ -1,5 +1,7 @@
-<?php
+ <?php
 require_once 'lib/common.php';
+
+session_start();
 
 // Connect to the database, run a query, handle errors
 $pdo = getPDO();
@@ -16,7 +18,7 @@ if ($stmt === false)
     throw new Exception('There was a problem running this query');
 }
 
-$notFound = isset($_GET['not-fount']);
+$notFound = isset($_GET['not-found']);
 
 ?>
 <!DOCTYPE html>
@@ -29,7 +31,7 @@ $notFound = isset($_GET['not-fount']);
         <?php require 'templates/title.php' ?>
 
         <?php if ($notFound): ?>
-            <div style="border: 1px solid $ff6666; padding: 6px;">
+            <div style="border: 1px solid #ff6666; padding: 6px;">
                 Error: cannot find the requested blog post
             </div>
         <?php endif ?>

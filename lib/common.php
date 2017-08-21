@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /**
  * Gets the root path of the project
@@ -55,6 +55,7 @@ function convertSqlDate($sqlDate)
 {
     /* @var $date DateTime */
     $date = DateTime::createFromFormat('Y-m-d H:i:s', $sqlDate);
+
     return $date->format('d M Y, H:i');
 }
 
@@ -65,20 +66,21 @@ function getSqlDateForNow()
 
 /**
  * Converts unsafe text to safe, paragraphed, HTML
- *
+ * 
  * @param string $text
  * @return string
  */
 function convertNewlinesToParagraphs($text)
 {
     $escaped = htmlEscape($text);
+
     return '<p>' . str_replace("\n", "</p><p>", $escaped) . '</p>';
 }
 
 function redirectAndExit($script)
 {
-    // Get the domain relative URL (e.g. /blog/whatever.php or /whatever.php) and work
-    // out the folder (e.g. /blog or /).
+    // Get the domain-relative URL (e.g. /blog/whatever.php or /whatever.php) and work
+    // out the folder (e.g. /blog/ or /).
     $relativeUrl = $_SERVER['PHP_SELF'];
     $urlFolder = substr($relativeUrl, 0, strrpos($relativeUrl, '/') + 1);
 
@@ -128,7 +130,7 @@ function getCommentsForPost($postId)
         FROM
             comment
         WHERE
-            post_id = :post_id        
+            post_id = :post_id
     ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(
@@ -136,4 +138,60 @@ function getCommentsForPost($postId)
     );
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function tryLogin(PDO $pdo, $username, $password)
+{
+    $sql = "
+        SELECT
+            password
+        FROM
+            user
+        WHERE
+            username = :username
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(
+        array('username' => $username, )
+    );
+
+    // Get the hash from this row, and use the third-party hashing library to check it
+    $hash = $stmt->fetchColumn();
+    $success = password_verify($password, $hash);
+
+    return $success;
+}
+
+/**
+ * Logs the user in
+ * 
+ * For safety, we ask PHP to regenerate the cookie, so if a user logs onto a site that a cracker
+ * has prepared for him/her (e.g. on a public computer) the cracker's copy of the cookie ID will be
+ * useless.
+ * 
+ * @param string $username
+ */
+function login($username)
+{
+    session_regenerate_id();
+
+    $_SESSION['logged_in_username'] = $username;
+}
+
+/**
+ * Logs the user out
+ */
+function logout()
+{
+    unset($_SESSION['logged_in_username']);
+}
+
+function getAuthUser()
+{
+    return isLoggedIn() ? $_SESSION['logged_in_username'] : null;
+}
+
+function isLoggedIn()
+{
+    return isset($_SESSION['logged_in_username']);
 }

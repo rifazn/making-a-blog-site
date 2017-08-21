@@ -24,8 +24,8 @@ INSERT INTO
 
 It is split into paragraphs.",
 		1,
-    datetime('now', '-2 months', '-45 minutes', '+10 seconds')
-)
+		datetime('now', '-2 months', '-45 minutes', '+10 seconds')
+	)
 ;
 
 INSERT INTO
@@ -38,8 +38,8 @@ INSERT INTO
 		"This is the body of the second post.
 This is another paragraph.",
 		1,
-    datetime('now', '-40 days', '+815 minutes', '+37 seconds')
-)
+		datetime('now', '-40 days', '+815 minutes', '+37 seconds')
+	)
 ;
 
 INSERT INTO
@@ -52,8 +52,8 @@ INSERT INTO
 		"This is the body of the third post.
 This is split into paragraphs.",
 		1,
-    datetime('now', '-13 days', '+198 minutes', '+51 seconds')
-)
+		datetime('now', '-13 days', '+198 minutes', '+51 seconds')
+	)
 ;
 
 DROP TABLE IF EXISTS comment;
@@ -74,7 +74,7 @@ INSERT INTO
 	)
 	VALUES(
 		1,
-    datetime('now', '-10 days', '+231 minutes', '+7 seconds'),
+		datetime('now', '-10 days', '+231 minutes', '+7 seconds'),
 		'Jimmy',
 		'http://example.com/',
 		"This is Jimmy's contribution"
@@ -88,9 +88,17 @@ INSERT INTO
 	)
 	VALUES(
 		1,
-    datetime('now', '-8 days', '+549 minutes', '+32 seconds'),
+		datetime('now', '-8 days', '+549 minutes', '+32 seconds'),
 		'Jonny',
 		'http://anotherexample.com/',
 		"This is a comment from Jonny"
 	)
 ;
+
+CREATE TABLE user (
+	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	username VARCHAR NOT NULL,
+	password VARCHAR NOT NULL,
+	created_at VARCHAR NOT NULL,
+	is_enabled BOOLEAN NOT NULL DEFAULT true
+);

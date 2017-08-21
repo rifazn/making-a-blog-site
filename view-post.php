@@ -1,6 +1,8 @@
-<?php
+ <?php
 require_once 'lib/common.php';
 require_once 'lib/view-post.php';
+
+session_start();
 
 // Get the post ID
 if (isset($_GET['post_id']))
@@ -15,8 +17,6 @@ else
 
 // Connect to the database, run a query, handle errors
 $pdo = getPDO();
-
-// Let's get a row
 $row = getPostRow($pdo, $postId);
 
 // If the post does not exist, let's deal with that here
@@ -39,7 +39,7 @@ if ($_POST)
         $commentData
     );
 
-    // If there are errors redirect back to self and redisplay
+    // If there are no errors, redirect back to self and redisplay
     if (!$errors)
     {
         redirectAndExit('view-post.php?post_id=' . $postId);
@@ -91,7 +91,7 @@ else
                 <div class="comment-body">
                     <?php // This is already escaped ?>
                     <?php echo convertNewlinesToParagraphs($comment['text']) ?>
-</div>
+                </div>
             </div>
         <?php endforeach ?>
 
