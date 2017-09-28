@@ -1,0 +1,3 @@
+RewriteEngine on
+RewriteCond %{REQUEST_URI} ^/(data|lib|templates|vendor)/
+RewriteRule ^ - [L,R=404]

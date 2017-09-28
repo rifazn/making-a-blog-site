@@ -1,5 +1,6 @@
  <?php
 require_once 'lib/common.php';
+// require_once 'vendor/password_compat/lib/password.php';
 
 // We need to test for a minimum version of PHP, because earlier versions have bugs that affect security
 if (version_compare(PHP_VERSION, '5.3.7') < 0)
@@ -34,14 +35,14 @@ if ($_POST)
         <title>
             A blog application | Login
         </title>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <?php require 'templates/head.php' ?>
     </head>
     <body>
         <?php require 'templates/title.php' ?>
 
         <?php // If we have a username, then the user got something wrong, so let's have an error ?>
         <?php if ($username): ?>
-            <div style="border: 1px solid #ff6666; padding: 6px;">
+            <div class="error box">
                 The username or password is incorrect, try again
             </div>
         <?php endif ?>

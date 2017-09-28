@@ -1,4 +1,4 @@
- <?php
+<?php
 
 /**
  * Gets the root path of the project
@@ -37,7 +37,16 @@ function getDsn()
  */
 function getPDO()
 {
-    return new PDO(getDsn());
+    $pdo = new PDO(getDsn());
+
+    // Foreign key constraints need to be enabled manually in SQLite
+    $result = $pdo->query('PRAGMA foreign_keys = ON');
+    if ($result === false)
+    {
+        throw new Exception('Could not turn on foreign key constraints');
+    }
+
+    return $pdo;
 }
 
 /**
@@ -94,12 +103,12 @@ function redirectAndExit($script)
 /**
  * Returns the number of comments for the specified post
  * 
+ * @param PDO $pdo
  * @param integer $postId
  * @return integer
  */
-function countCommentsForPost($postId)
+function countCommentsForPost(PDO $pdo, $postId)
 {
-    $pdo = getPDO();
     $sql = "
         SELECT
             COUNT(*) c
@@ -119,11 +128,12 @@ function countCommentsForPost($postId)
 /**
  * Returns all the comments for the specified post
  * 
+ * @param PDO $pdo
  * @param integer $postId
+ * return array
  */
-function getCommentsForPost($postId)
+function getCommentsForPost(PDO $pdo, $postId)
 {
-    $pdo = getPDO();
     $sql = "
         SELECT
             id, name, text, created_at, website
