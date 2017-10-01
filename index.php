@@ -13,6 +13,7 @@ $stmt = $pdo->query(
     ORDER BY
         created_at DESC'
 );
+
 if ($stmt === false)
 {
     throw new Exception('There was a problem running this query');
